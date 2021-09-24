@@ -13,9 +13,29 @@ namespace Client
             int port = 26750;
 
             Client client = new Client(ip, port);
-            client.SendMessage(Packet.PLAYER_SPAWN);
-            client.SendMessage(Packet.PLAYER_MOVE);
-            client.SendMessage(Packet.PLAYER_ATTACK);
+            client.SpawnPlayer();
+
+            while (true)
+            {
+                Console.WriteLine($"1: To Move\n2: To Attack");
+                switch (int.Parse(Console.ReadLine()))
+                {
+                    case 1:
+                        Console.Write("Enter move X-Coordinate: ");
+                        int x = int.Parse(Console.ReadLine());
+                        Console.Write("Enter move Y-Coordinate: ");
+                        int y = int.Parse(Console.ReadLine());
+                        client.PlayerMovement(x, y);
+                        break;
+                    case 2:
+                        client.PlayerAttack();
+                        break;
+                    default:
+                        Console.WriteLine($"cant find what you want...");
+                        break;
+                }
+
+            }
 
             Console.ReadKey();
         }

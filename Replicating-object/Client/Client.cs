@@ -32,13 +32,33 @@ namespace Client
             }
         }
 
-        public void SendMessage(Packet _packet)
+        public void SpawnPlayer()
         {
-            // Translate the Message into ASCII.
-            byte[] data = BitConverter.GetBytes((Int32) _packet);
+            List<byte> data = new List<byte>();
+            data.AddRange(BitConverter.GetBytes((int)Packet.PLAYER_SPAWN));
 
             // Send the message to the connected server. 
-            stream.Write(data, 0, data.Length);
+            stream.Write(data.ToArray(), 0, data.Count);
+        }
+
+        public void PlayerMovement(int _x, int _y)
+        {
+            List<byte> data = new List<byte>();
+            data.AddRange(BitConverter.GetBytes((int)Packet.PLAYER_MOVE));
+            data.AddRange(BitConverter.GetBytes(_x));
+            data.AddRange(BitConverter.GetBytes(_y));
+
+            // Send the message to the connected server. 
+            stream.Write(data.ToArray(), 0, data.Count);
+        }
+
+        public void PlayerAttack()
+        {
+            List<byte> data = new List<byte>();
+            data.AddRange(BitConverter.GetBytes((int)Packet.PLAYER_ATTACK));
+
+            // Send the message to the connected server. 
+            stream.Write(data.ToArray(), 0, data.Count);
         }
     }
 }

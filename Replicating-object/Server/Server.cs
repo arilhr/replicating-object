@@ -49,23 +49,6 @@ namespace Server
             Console.WriteLine($"Incoming connection from {client.Client.RemoteEndPoint}...");
         }
 
-        private void InitializePacketHandler()
-        {
-            packetHandlers = new Dictionary<int, PacketHandler>()
-            {
-                { (int) Packet.PLAYER_SPAWN, SpawnPlayer}
-            };
-        }
-
-        public void SpawnPlayer(int _fromClient)
-        {
-
-        }
-
-        public void MovePlayer(int _fromClient)
-        {
-
-        }
     }
 
 
@@ -123,20 +106,23 @@ namespace Server
                 switch (packetType)
                 {
                     case (int)Packet.PLAYER_SPAWN:
-                        Console.WriteLine("Spawned");
+                        player = new Player(0, 0);
                         break;
                     case (int)Packet.PLAYER_MOVE:
-                        Console.WriteLine("Player Move");
+                        int x = BitConverter.ToInt32(buffer, readPos);
+                        readPos += 4;
+                        int y = BitConverter.ToInt32(buffer, readPos);
+                        readPos += 4;
+                        player.Move(x, y);
                         break;
                     case (int)Packet.PLAYER_ATTACK:
-                        Console.WriteLine("Player Attack");
+                        player.Attack();
                         break;
                     default:
                         break;
                 }
             }
-            
-
         }
+
     }
 }
